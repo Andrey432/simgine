@@ -1,0 +1,26 @@
+application:
+  resolution: [1200, 800]
+  flags:
+    - resizable
+  fps: 60
+  vsync: no
+  caption: Simgine
+  background: gray10
+  gui_config: data/gui.yaml
+project:
+  gameobjects: data/scenes.yaml
+  main_module: scripts
+  defaultscene: Default
+defaultbsp:
+  initsize: 65536
+  minsize: 2
+  objectslimit: 7
+multiprocessing:
+  encoding: ascii
+time:
+  initspeed: 1
+  initstep: 0.02
+logging:
+  level: debug
+  console: yes
+  logpath: data/debug/logs

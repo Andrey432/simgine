@@ -1,0 +1,27 @@
+prefabs:
+  SamePrefab:
+    class: SameObject
+    params:
+      health: 100
+      hungry: 0
+      thirst: 0
+      energy: 100
+      speed: 1
+  FrameRateMeter:
+    class: FrameRateMeter
+    params:
+      enabled: no
+      delta: 1
+  Spawner:
+    class: Spawner
+scenes:
+  Default: {}
+  SampleScene:
+    objects:
+      - prefab: Spawner
+      - prefab: FrameRateMeter
+      - prefab: SamePrefab
+        transform:
+          move_to: [150, 150]
+          set_angle: [0]
+          set_shape: [null]
