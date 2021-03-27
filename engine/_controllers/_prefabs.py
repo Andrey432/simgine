@@ -1,6 +1,6 @@
 from .._types.objects import Prefab
 from .._special import Singleton
-from .._loaders import YAML_format
+from .._loaders import YamlLoader
 from .._config import Config
 from ._modules import ModulesController
 
@@ -17,7 +17,7 @@ class PrefabsController(Singleton):
         self._prefabs = {}
 
     def init(self):
-        prefabs = YAML_format(self._config.project.gameobjects)["prefabs"]
+        prefabs = YamlLoader.load(self._config.project.gameobjects)["prefabs"]
         main_module = self._modules
 
         for name, data in prefabs.items():
