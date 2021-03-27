@@ -1,4 +1,4 @@
-from ..._loaders import YAML_format
+from ..._loaders import YamlLoader
 from .. import _application
 from ._layout import Layout
 from ._elements import BaseElement
@@ -37,7 +37,7 @@ class GUIManager:
         self._mng = gui.UIManager(settings['resolution'])
 
         file = settings['gui_config']
-        data = YAML_format(file)
+        data = YamlLoader.load(file)
         for space_name in data:
             lt = Layout(data[space_name], manager=self._mng)
             self._layouts[space_name] = lt

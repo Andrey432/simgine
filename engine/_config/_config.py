@@ -1,4 +1,4 @@
-from .._loaders import YAML_format
+from .._loaders import YamlLoader
 from .._special import Singleton
 
 
@@ -25,7 +25,7 @@ class ParamsContainerMeta(type):
 class Config(Singleton):
     def __init__(self, file):
         super().__init__()
-        data = YAML_format(file)
+        data = YamlLoader.load(file)
         for section_name, values in data.items():
             section = ParamsContainerMeta(values)
             setattr(self, section_name, section)

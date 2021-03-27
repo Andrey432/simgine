@@ -1,5 +1,5 @@
 from .._scene import Scene
-from .._loaders import YAML_format
+from .._loaders import YamlLoader
 from .._special import Singleton
 from .._config import Config
 
@@ -14,7 +14,7 @@ class ScenesController(Singleton):
         self._current_scene = None
 
     def init(self):
-        data = YAML_format(self._config.project.gameobjects)['scenes']
+        data = YamlLoader.load(self._config.project.gameobjects)['scenes']
         for scene_name, scene_data in data.items():
             self._scenes[scene_name] = Scene(scene_data)
         self._current_scene = self._scenes[self._config.project.defaultscene]
