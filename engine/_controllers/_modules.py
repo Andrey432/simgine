@@ -1,7 +1,7 @@
-from .._special import Singleton
-from .._config import Config
 import importlib
 import sys
+from .._special import Singleton
+from ._config import Config
 
 __all__ = ['ModulesController']
 
@@ -21,9 +21,12 @@ class ModulesController(Singleton):
 
     def _load(self, import_func):
         state = set(sys.modules.keys())
-        module = self._config.project.main_module
+        module = self._config.get('project/main_module')
         self._mainmd_inst = import_func(module)
         self._dependencies = set(sys.modules) ^ state
+
+    def init(self):
+        self.load()
 
     def load(self):
         self._load(importlib.import_module)

@@ -1,6 +1,5 @@
 from .. import _controllers as ctrl
 from .._special import BSP, Buffer
-from .._config import Config
 from .._types import objects
 
 
@@ -8,8 +7,8 @@ class Scene:
     __slots__ = ('_bsp', '_scripts_md', '_objects', '_prefabs', '_update_queue', '_new_objects', '_del_queue')
 
     def __init__(self, init_data):
-        config = Config.instance()
-        self._bsp = BSP(**config.defaultbsp.all())
+        config = ctrl.Config.instance()
+        self._bsp = BSP(**config.get('defaultbsp'))
         self._scripts_md = ctrl.ModulesController.instance()
         self._prefabs = ctrl.PrefabsController.instance()
         self._objects = {}

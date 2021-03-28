@@ -1,6 +1,6 @@
-from . import api
+from .engine import Engine
+
+__all__ = ['engine']
+
 import os
-
-__all__ = ['api']
-
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'

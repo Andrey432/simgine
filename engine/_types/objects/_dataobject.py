@@ -1,5 +1,5 @@
 from ._base import BaseObject
-from ... import _core
+from ... import engine
 
 __all__ = ['DataObject']
 
@@ -7,7 +7,7 @@ __all__ = ['DataObject']
 class DataObject(BaseObject):
     def __init__(self):
         super().__init__()
-        self.__engine = _core.CoreInterface.instance()
+        self.__engine = engine.Engine.instance()
 
     @property
     def engine(self):
