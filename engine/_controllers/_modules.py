@@ -32,7 +32,9 @@ class ModulesController(Singleton):
         self._reset_dependencies()
         self._load(importlib.reload)
 
-    def get_attr(self, name: str):
-        for md in self._modules.values():
-            if hasattr(md, name):
-                return getattr(md, name)
+    def get_attr(self, variable: str):
+        levels = variable.split('.')
+        v = self._modules[levels[0]]
+        for i in levels[1:]:
+            v = getattr(v, i)
+        return v

@@ -57,7 +57,9 @@ class Scene:
     def update(self):
         self._delete_objects()
         self._spawn_new()
-        current = self._update_queue.buffer()
+        upd_q = self._update_queue
+        current = upd_q.buffer()
 
         for obj in current:
             obj.update(0.02)
+            upd_q.push(obj)
