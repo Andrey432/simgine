@@ -1,3 +1,7 @@
+project:
+  additional_cnf: data/config.yaml
+  gameobjects: data/scenes.yaml
+  defaultscene: Default
 application:
   resolution: [1200, 800]
   flags:
@@ -7,10 +11,6 @@ application:
   caption: Simgine
   background: gray10
   gui_config: data/gui.yaml
-project:
-  gameobjects: data/scenes.yaml
-  main_module: scripts
-  defaultscene: Default
 defaultbsp:
   initsize: 65536
   minsize: 2

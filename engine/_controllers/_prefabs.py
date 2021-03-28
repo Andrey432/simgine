@@ -22,7 +22,7 @@ class PrefabsController(Singleton):
         main_module = self._modules
 
         for name, data in prefabs.items():
-            class_ = main_module.get_class(data['class'])
+            class_ = main_module.get_attr(data['class'])
             prefab = Prefab(name, class_, data.get('params', {}))
             self._prefabs[name] = prefab
 
