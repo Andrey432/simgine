@@ -7,33 +7,34 @@ __all__ = ['ModulesController']
 
 
 class ModulesController(Singleton):
-    __slots__ = ('_config', '_mainmd_inst', '_dependencies')
+    __slots__ = ('_config', '_modules', '_dependencies')
 
     def __init__(self):
         super().__init__()
         self._config = Config.instance()
-        self._mainmd_inst = None
+        self._modules = {}
         self._dependencies = {}
 
     def _reset_dependencies(self):
         for dp in self._dependencies:
             sys.modules.pop(dp)
 
-    def _load(self, import_func):
+    def _load(self, importer):
         state = set(sys.modules.keys())
-        module = self._config.get('project/main_module')
-        self._mainmd_inst = import_func(module)
+        md_list = self._config.get('includes')
+        self._modules = {i: importer(i) for i in md_list}
         self._dependencies = set(sys.modules) ^ state
 
     def init(self):
-        self.load()
-
-    def load(self):
         self._load(importlib.import_module)
 
     def reload(self):
         self._reset_dependencies()
         self._load(importlib.reload)
 
-    def get_class(self, classname):
-        return getattr(self._mainmd_inst, classname)
+    def get_attr(self, variable: str):
+        levels = variable.split('.')
+        v = self._modules[levels[0]]
+        for i in levels[1:]:
+            v = getattr(v, i)
+        return v

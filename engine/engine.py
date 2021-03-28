@@ -25,6 +25,7 @@ class Engine(Singleton):
         app.join_app_proc()
 
     def init(self):
+        self._config.init()
         self._modules_ctrl.init()
         self._app_ctrl.init()
         self._prefabs_ctrl.init()
