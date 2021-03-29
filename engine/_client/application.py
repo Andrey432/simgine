@@ -42,7 +42,7 @@ class Application(Singleton):
     def window(self) -> window.Window:
         return self._window
 
-    def _handle_sys_event(self, event: pygame.event.Event) -> [None, tuple]:
+    def _handle_sys_event(self, event: pygame.event.Event):
         self._gui.handle_event(event)
         if event.type == pygame.QUIT:
             self.shutdown()
