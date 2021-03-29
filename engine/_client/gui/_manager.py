@@ -1,5 +1,5 @@
 from ..._loaders import YamlLoader
-from .. import _application
+from .. import application
 from ._layout import Layout
 from ._elements import BaseElement
 import pygame_gui as gui
@@ -30,7 +30,7 @@ class GUIManager:
         super().__init__()
         self._layouts = {}  # type: dict[str, Layout]
         self._elements = {}  # type: dict[str, BaseElement]
-        self._app = _application.Application.instance()  # type: _application.Application
+        self._app = application.Application.instance()  # type: application.Application
         self._mng = None  # type: gui.UIManager
 
     def init(self, settings) -> None:
@@ -38,11 +38,23 @@ class GUIManager:
 
         file = settings['gui_config']
         data = YamlLoader.load(file)
-        for space_name in data:
-            lt = Layout(data[space_name], manager=self._mng)
-            self._layouts[space_name] = lt
+        layouts = data['layouts']
+        references = data['refs']
+
+        for lt_name in layouts:
+            lt = Layout(layouts[lt_name], manager=self._mng)
+            self._layouts[lt_name] = lt
             for elem in lt.elements_list():
                 self._elements[elem.id] = elem
+
+        md_ctrl = self._app.md_controller
+        for ref, handler in references.items():
+            lt, elem, param = ref.split('.')
+            clb = md_ctrl.get_attr(handler)
+            self._layouts[lt].get(elem).set_handler(param, clb)
+
+    def get_element(self, name: str) -> BaseElement:
+        return self._elements[name]
 
     def handle_event(self, event: pygame.event.Event) -> [None, tuple]:
         if event.type == pygame.USEREVENT:

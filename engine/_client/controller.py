@@ -1,5 +1,5 @@
 from .._special import ProcessBridge
-from ._application import Application
+from .application import Application
 
 
 class Controller(ProcessBridge):

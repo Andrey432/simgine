@@ -1,29 +1,32 @@
-Main:
-  Button:
-    class: Button
-    rect: [ 160, 20, 175, 50 ]
-    text: Test
-  Window:
-    class: Window
-    rect: [ 300, 300, 400, 400]
-    resizable: yes
-  Panel:
-    class: Panel
-    rect: [ 20, 80, 400, 400 ]
-    starting_layer_height: 9999
-  Label:
-    class: Label
-    rect: [ 20, 20, 100, 40 ]
-    text: Label
-  Image:
-    class: Image
-    rect: [ 800, 20, 200, 200 ]
-  DropDownMenu:
-    class: DropDownMenu
-    rect: [ 800, 240, 300, 50 ]
-  List:
-    class: List
-    rect: [ 430, 30, 300, 300 ]
-  Scroll:
-    class: ScrollBar
-    rect: [ 800, 450, 300, 20 ]
+layouts:
+  Main:
+    Button:
+      class: Button
+      rect: [ 160, 20, 175, 50 ]
+      text: Test
+    Window:
+      class: Window
+      rect: [ 300, 300, 400, 400]
+      resizable: yes
+    Panel:
+      class: Panel
+      rect: [ 20, 80, 400, 400 ]
+      starting_layer_height: 9999
+    Label:
+      class: Label
+      rect: [ 20, 20, 100, 40 ]
+      text: Label
+    Image:
+      class: Image
+      rect: [ 800, 20, 200, 200 ]
+    DropDownMenu:
+      class: DropDownMenu
+      rect: [ 800, 240, 300, 50 ]
+    List:
+      class: List
+      rect: [ 430, 30, 300, 300 ]
+    Scroll:
+      class: ScrollBar
+      rect: [ 800, 450, 300, 20 ]
+refs:
+  Main.Scroll.current_value: gui.update_scroll_value

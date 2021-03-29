@@ -14,5 +14,5 @@ class Layout:
     def elements_list(self) -> list[_elements.BaseElement]:
         return list(self._elements.values())
 
-    def get(self, element):
+    def get(self, element) -> _elements.BaseElement:
         return self._elements[element]
