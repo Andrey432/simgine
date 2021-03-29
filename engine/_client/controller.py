@@ -11,6 +11,8 @@ class Controller(ProcessBridge):
 
     def run(self):
         app, rb = self._app, self._reset_buffer
-        while app.running:
+        app.init()
+
+        while app.is_running():
             app.update()
             rb()

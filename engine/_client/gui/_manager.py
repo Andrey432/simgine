@@ -30,13 +30,16 @@ class GUIManager:
         super().__init__()
         self._layouts = {}  # type: dict[str, Layout]
         self._elements = {}  # type: dict[str, BaseElement]
-        self._app = application.Application.instance()  # type: application.Application
+        self._app = None  # type: application.Application
         self._mng = None  # type: gui.UIManager
 
-    def init(self, settings) -> None:
-        self._mng = gui.UIManager(settings['resolution'])
+    def init(self) -> None:
+        self._app = application.Application.instance()  # type: application.Application
+        config = self._app.config
 
-        file = settings['gui_config']
+        self._mng = gui.UIManager(config.get('application/resolution'))
+
+        file = config.get('project/gui_config')
         data = YamlLoader.load(file)
         layouts = data['layouts']
         references = data['refs']

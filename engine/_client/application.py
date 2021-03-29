@@ -1,11 +1,14 @@
 import pygame
-from . import gui, renderer, _window, _resources
+from . import gui, renderer, window, resources
 from .._special import Singleton
 from .._constants.multiprocessing import *
+from .._controllers import ModulesController, Config
 
 
 class Application(Singleton):
-    __slots__ = ('_running', '_initialized', '_controller', '_gui', '_res', '_window', '_cameras')
+    __slots__ = ('_running', '_initialized', '_controller',
+                 '_gui', '_res', '_window', '_cameras',
+                 '_md_controller', '_config')
 
     def __init__(self, controller):
         self._running = True
@@ -14,26 +17,30 @@ class Application(Singleton):
 
         self._gui = gui.GUIManager()
         self._cameras = []
-        self._window = _window.Window()
-        self._res = _resources.ResourcesManager()
+        self._window = window.Window()
+        self._res = resources.ResourcesManager()
+        self._config = Config()
+        self._md_controller = ModulesController()
 
     @property
-    def resources(self) -> _resources.ResourcesManager:
+    def config(self):
+        return self._config
+
+    @property
+    def md_controller(self):
+        return self._md_controller
+
+    @property
+    def gui(self):
+        return self._gui
+
+    @property
+    def resources(self) -> resources.ResourcesManager:
         return self._res
 
     @property
-    def window(self) -> _window.Window:
+    def window(self) -> window.Window:
         return self._window
-
-    @property
-    def running(self) -> bool:
-        return self._running
-
-    def _init(self, settings) -> None:
-        pygame.init()
-        self._window.init(settings)
-        self._gui.init(settings)
-        self._initialized = True
 
     def _handle_sys_event(self, event: pygame.event.Event) -> [None, tuple]:
         self._gui.handle_event(event)
@@ -59,9 +66,7 @@ class Application(Singleton):
             self._handle_command(*i)
 
     def _handle_command(self, command, *args) -> None:
-        if command == STARTUP:
-            self._init(*args)
-        elif command == SHUTDOWN:
+        if command == SHUTDOWN:
             self._running = False
 
     def _update_app(self) -> None:
@@ -69,6 +74,17 @@ class Application(Singleton):
         self._window.clear()
         self._gui.update()
         self._window.update()
+
+    def init(self) -> None:
+        pygame.init()
+        self._config.init()
+        self._md_controller.init()
+        self._window.init()
+        self._gui.init()
+        self._initialized = True
+
+    def is_running(self) -> bool:
+        return self._running
 
     def shutdown(self) -> None:
         self._controller.send(SHUTDOWN)
