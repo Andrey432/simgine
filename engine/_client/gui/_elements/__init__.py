@@ -6,4 +6,4 @@ from .button import *
 from .window import *
 from .scroll_bar import *
 from .dropdownmenu import *
-from .base_element import BaseElement
+from .base import BaseElement

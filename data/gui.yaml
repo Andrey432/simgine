@@ -29,4 +29,4 @@ layouts:
       class: ScrollBar
       rect: [ 800, 450, 300, 20 ]
 refs:
-  Main.Scroll.current_value: gui.update_scroll_value
+  Main.Scroll.scroll_value: gui.update_scroll_value
