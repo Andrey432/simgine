@@ -1,5 +1,5 @@
 from .._special import ProcessBridge
-from ._application import Application
+from .application import Application
 
 
 class Controller(ProcessBridge):
@@ -11,6 +11,8 @@ class Controller(ProcessBridge):
 
     def run(self):
         app, rb = self._app, self._reset_buffer
-        while app.running:
+        app.init()
+
+        while app.is_running():
             app.update()
             rb()

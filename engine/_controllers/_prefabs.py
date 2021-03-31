@@ -1,8 +1,8 @@
 from .._types.objects import Prefab
 from .._special import Singleton
-from .._loaders import YAML_format
-from .._config import Config
+from .._loaders import YamlLoader
 from ._modules import ModulesController
+from ._config import Config
 
 __all__ = ['PrefabsController']
 
@@ -17,11 +17,12 @@ class PrefabsController(Singleton):
         self._prefabs = {}
 
     def init(self):
-        prefabs = YAML_format(self._config.project.gameobjects)["prefabs"]
+        file = self._config.get('project/gameobjects')
+        prefabs = YamlLoader.load(file)["prefabs"]
         main_module = self._modules
 
         for name, data in prefabs.items():
-            class_ = main_module.get_class(data['class'])
+            class_ = main_module.get_attr(data['class'])
             prefab = Prefab(name, class_, data.get('params', {}))
             self._prefabs[name] = prefab
 

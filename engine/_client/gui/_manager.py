@@ -1,5 +1,5 @@
-from ..._loaders import YAML_format
-from .. import _application
+from ..._loaders import YamlLoader
+from .. import application
 from ._layout import Layout
 from ._elements import BaseElement
 import pygame_gui as gui
@@ -30,28 +30,43 @@ class GUIManager:
         super().__init__()
         self._layouts = {}  # type: dict[str, Layout]
         self._elements = {}  # type: dict[str, BaseElement]
-        self._app = _application.Application.instance()  # type: _application.Application
+        self._app = None  # type: application.Application
         self._mng = None  # type: gui.UIManager
 
-    def init(self, settings) -> None:
-        self._mng = gui.UIManager(settings['resolution'])
+    def init(self) -> None:
+        self._app = application.Application.instance()  # type: application.Application
+        config = self._app.config
 
-        file = settings['gui_config']
-        data = YAML_format(file)
-        for space_name in data:
-            lt = Layout(data[space_name], manager=self._mng)
-            self._layouts[space_name] = lt
+        self._mng = gui.UIManager(config.get('application/resolution'))
+
+        file = config.get('project/gui_config')
+        data = YamlLoader.load(file)
+        layouts = data['layouts']
+        references = data['refs']
+
+        for lt_name in layouts:
+            lt = Layout(layouts[lt_name], manager=self._mng)
+            self._layouts[lt_name] = lt
             for elem in lt.elements_list():
                 self._elements[elem.id] = elem
 
-    def handle_event(self, event: pygame.event.Event) -> [None, tuple]:
+        md_ctrl = self._app.md_controller
+        for ref, handler in references.items():
+            lt, elem, param = ref.split('.')
+            clb = md_ctrl.get_attr(handler)
+            self._layouts[lt].get(elem).set_handler(param, clb)
+
+    def get_element(self, name: str) -> BaseElement:
+        return self._elements[name]
+
+    def handle_event(self, event: pygame.event.Event):
         if event.type == pygame.USEREVENT:
             if event.user_type in _REPR_TABLE:
-                element = event.ui_object_id.split('.')[0]
+                element = event.ui_element.object_ids[0]
                 event.user_type = _REPR_TABLE[event.user_type]
-                return event.user_type, element, *self._elements[element].handle_event(event)
-            return
-        self._mng.process_events(event)
+                self._elements[element].handle_event(event)
+        else:
+            self._mng.process_events(event)
 
     def update(self) -> None:
         win = self._app.window

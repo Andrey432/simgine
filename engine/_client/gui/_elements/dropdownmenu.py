@@ -1,4 +1,4 @@
-from .base_element import BaseElement
+from .base import *
 from pygame_gui.elements import UIDropDownMenu
 
 __all__ = ['DropDownMenu']

@@ -1,6 +1,6 @@
 prefabs:
   SamePrefab:
-    class: SameObject
+    class: scripts.SameObject
     params:
       health: 100
       hungry: 0
@@ -8,12 +8,12 @@ prefabs:
       energy: 100
       speed: 1
   FrameRateMeter:
-    class: FrameRateMeter
+    class: scripts.FrameRateMeter
     params:
-      enabled: no
+      enabled: yes
       delta: 1
   Spawner:
-    class: Spawner
+    class: scripts.Spawner
 scenes:
   Default: {}
   SampleScene:
