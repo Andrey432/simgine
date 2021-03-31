@@ -42,35 +42,26 @@ class Application(Singleton):
     def window(self) -> window.Window:
         return self._window
 
-    def _handle_sys_event(self, event: pygame.event.Event):
-        self._gui.handle_event(event)
+    def _handle_event(self, event: pygame.event.Event):
         if event.type == pygame.QUIT:
             self.shutdown()
-            return
         elif event.type == pygame.VIDEORESIZE:
             self._window.resize()
-
-    def _handle_events(self) -> None:
-        gui_h = self._gui.handle_event
-        sys_h = self._handle_sys_event
-
-        for e in pygame.event.get():
-            handler = gui_h if e.type == pygame.USEREVENT else sys_h
-            # noinspection PyArgumentList
-            response = handler(e)
-            if response:
-                self._controller.send(GUI_EVENT, *response)
-
-    def _handle_commands(self) -> None:
-        for i in self._controller.read():
-            self._handle_command(*i)
 
     def _handle_command(self, command, *args) -> None:
         if command == SHUTDOWN:
             self._running = False
 
+    def _handle_events(self) -> None:
+        for i in self._controller.read():
+            self._handle_command(*i)
+
+        if self._initialized:
+            for e in pygame.event.get():
+                self._handle_event(e)
+                self._gui.handle_event(e)
+
     def _update_app(self) -> None:
-        self._handle_events()
         self._window.clear()
         self._gui.update()
         self._window.update()
@@ -91,6 +82,6 @@ class Application(Singleton):
         self._running = False
 
     def update(self) -> None:
-        self._handle_commands()
+        self._handle_events()
         if self._initialized:
             self._update_app()

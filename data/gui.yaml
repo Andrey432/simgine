@@ -28,5 +28,8 @@ layouts:
     Scroll:
       class: ScrollBar
       rect: [ 800, 450, 300, 20 ]
+    InputBox:
+      class: InputBox
+      rect: [20, 540, 200, 50]
 refs:
   Main.Scroll.scroll_value: gui.update_scroll_value

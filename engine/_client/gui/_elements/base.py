@@ -1,3 +1,4 @@
+from pygame_gui import core
 from pygame import Rect
 from typing import Callable
 
@@ -7,7 +8,7 @@ __all__ = ['BaseElement', 'Field']
 class Field:
     __slots__ = ('_value', '_type', '_base_handler', '_handlers', '_triggering')
 
-    def __init__(self, type_: type, base_handler):
+    def __init__(self, type_: type, base_handler=lambda i, v: None):
         self._value = None
         self._type = type_
         self._base_handler = base_handler
@@ -49,10 +50,22 @@ class BaseElement:
     def __change_layer(self, layer): self._elem.change_layer(layer)
     layer = Field(int, __change_layer)
 
+    def __change_xsize(self, value): self._elem.set_dimensions((value, self._elem.relative_rect.height))
+    xsize = Field(int, __change_xsize)
+
+    def __change_ysize(self, value): self._elem.set_dimensions((self._elem.relative_rect.width, value))
+    ysize = Field(int, __change_ysize)
+
+    def __change_xposition(self, value): self._elem.set_position((value, self._elem.relative_rect.y))
+    xposition = Field(int, __change_xposition)
+
+    def __change_yposition(self, value): self._elem.set_position((self._elem.relative_rect.x, value))
+    yposition = Field(int, __change_yposition)
+
     def __init__(self, id_, manager, class_, **attrs):
         rname = 'rect' if 'rect' in attrs else 'relative_rect'
         attrs[rname] = Rect(attrs[rname])
-        self._elem = class_(manager=manager, object_id=id_, **attrs)
+        self._elem = class_(manager=manager, object_id=id_, **attrs)  # type: core.UIElement
         self._id = id_
 
     @property

@@ -59,14 +59,14 @@ class GUIManager:
     def get_element(self, name: str) -> BaseElement:
         return self._elements[name]
 
-    def handle_event(self, event: pygame.event.Event) -> [None, tuple]:
+    def handle_event(self, event: pygame.event.Event):
         if event.type == pygame.USEREVENT:
             if event.user_type in _REPR_TABLE:
-                element = event.ui_object_id.split('.')[0]
+                element = event.ui_element.object_ids[0]
                 event.user_type = _REPR_TABLE[event.user_type]
-                return event.user_type, element, *self._elements[element].handle_event(event)
-            return
-        self._mng.process_events(event)
+                self._elements[element].handle_event(event)
+        else:
+            self._mng.process_events(event)
 
     def update(self) -> None:
         win = self._app.window
