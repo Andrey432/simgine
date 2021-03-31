@@ -40,9 +40,6 @@ class Engine(Singleton):
     def shutdown(self):
         self._app_ctrl.shutdown()
 
-    def events(self):
-        return self._app_ctrl.events
-
     def create_scene(self, name):
         self._core.scenes_ctrl.create_empty_scene(name)
 

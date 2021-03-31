@@ -7,7 +7,7 @@ __all__ = ['ApplicationController']
 
 
 class ApplicationController(sp.Singleton):
-    __slots__ = ('_bridge', '_running', '_app_proc', '_events')
+    __slots__ = ('_bridge', '_running', '_app_proc')
 
     # noinspection PyTypeChecker
     def __init__(self):
@@ -15,11 +15,6 @@ class ApplicationController(sp.Singleton):
         self._bridge = None    # type: sp.ProcessBridge
         self._app_proc = None  # type: mp.Process
         self._running = False
-        self._events = sp.Buffer(64)
-
-    @property
-    def events(self):
-        return self._events.buffer()
 
     def _create_app(self, config):
         in_stream = mp.Pipe(False)
@@ -35,10 +30,6 @@ class ApplicationController(sp.Singleton):
     def _handle_command(self, command, *args):
         if command == SHUTDOWN:
             self.shutdown(repeat=False)
-        elif command == GUI_EVENT:
-            if args[0] == 'onclick':
-                print(args)
-            self._events.safe_push(args)
 
     def init(self):
         config = Config.instance()

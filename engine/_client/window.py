@@ -1,3 +1,4 @@
+from .._controllers import Config
 from functools import reduce
 from pygame import display
 import pygame
@@ -18,7 +19,8 @@ class Window:
     def frame_time(self):
         return self._frame_time
 
-    def init(self, settings):
+    def init(self):
+        settings = Config.instance().get('application')
         self._flags = reduce(lambda c, v: c | getattr(pygame, v.upper()), [0] + settings["flags"])
         display.set_caption(settings.get("caption", ""))
 
